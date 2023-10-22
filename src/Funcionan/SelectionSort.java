@@ -5,68 +5,57 @@ import java.util.Random;
 public class SelectionSort {
 
     public static void main(String[] args) {
-        long startTime = System.currentTimeMillis(); // Registra el tiempo de inicio
+        long startTime = System.nanoTime();
+        int rows = 6000;
+        int columns = 6000;
+        int[][] matrix = new int[rows][columns];
 
-        int[][] matrix = generateRandomMatrix(100, 100, 1, 999);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                matrix[i][j] = (int) (Math.random() * 10000);
+            }
+        }
 
         System.out.println("Matriz original:");
         printMatrix(matrix);
 
-        selectionSortMatrix(matrix);
+        selectionSort(matrix);
 
         System.out.println("Matriz ordenada:");
         printMatrix(matrix);
 
-        long endTime = System.currentTimeMillis(); // Registra el tiempo de finalización
-        long executionTime = endTime - startTime;
-        System.out.println("Tiempo de ejecución: " + executionTime + " milisegundos");
+        long endTime = System.nanoTime();
+        long elapsedTime = endTime - startTime;
+        System.out.println("Tiempo de ejecución: " + (elapsedTime / 1000000) + " milisegundos");
     }
 
-    public static int[][] generateRandomMatrix(int rows, int cols, int min, int max) {
-        int[][] matrix = new int[rows][cols];
-        Random random = new Random();
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                matrix[i][j] = random.nextInt(max - min + 1) + min;
-            }
+    public static void selectionSort(int[][] matrix) {
+        int rows = matrix.length;
+        if (rows == 0) {
+            return; // Matriz vacía, no se puede ordenar
         }
 
-        return matrix;
-    }
-
-    public static void selectionSortMatrix(int[][] matrix) {
-        int rows = matrix.length;
         int cols = matrix[0].length;
-
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                int minRow = row;
-                int minCol = col;
-
-                for (int i = row; i < rows; i++) {
-                    for (int j = (i == row ? col + 1 : 0); j < cols; j++) {
-                        if (matrix[i][j] < matrix[minRow][minCol]) {
-                            minRow = i;
-                            minCol = j;
-                        }
+        for (int col = 0; col < cols; col++) {
+            for (int i = 0; i < rows - 1; i++) {
+                int minIndex = i;
+                for (int j = i + 1; j < rows; j++) {
+                    if (matrix[j][col] < matrix[minIndex][col]) {
+                        minIndex = j;
                     }
                 }
-
-                if (minRow != row || minCol != col) {
-                    // Intercambiar elementos
-                    int temp = matrix[row][col];
-                    matrix[row][col] = matrix[minRow][minCol];
-                    matrix[minRow][minCol] = temp;
-                }
+                // Intercambiar elementos en la matriz
+                int temp = matrix[i][col];
+                matrix[i][col] = matrix[minIndex][col];
+                matrix[minIndex][col] = temp;
             }
         }
     }
 
     public static void printMatrix(int[][] matrix) {
         for (int[] row : matrix) {
-            for (int value : row) {
-                System.out.print(value + " ");
+            for (int num : row) {
+                System.out.print(num + " ");
             }
             System.out.println();
         }

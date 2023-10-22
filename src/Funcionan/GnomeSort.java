@@ -57,8 +57,8 @@ public class GnomeSort {
 
     public static void main(String[] args) {
         long startTime = System.nanoTime();
-        int rows = 10;
-        int columns = 10;
+        int rows = 8000;
+        int columns = 8000;
         int[][] matrix = new int[rows][columns];
 
         for (int i = 0; i < rows; i++) {
